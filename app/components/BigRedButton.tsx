@@ -10,6 +10,16 @@ export default function HomePage() {
   const [isPushed, setIsPushed] = useState(false);
 
   useEffect(() => {
+    if (isPushed) {
+      const intervalId = setInterval(() => {
+        console.log("Check if reset button is pushed");
+      }, 1000);
+      
+      return () => clearInterval(intervalId); // CLean up will only be needed if it enters the if block
+    }
+  }, [isPushed]);
+
+  useEffect(() => {
     // Initialize the audio instance once on component mount
     audioRef.current = new Audio("/sounds/button-push.mp3");
 

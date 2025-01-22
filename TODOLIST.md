@@ -10,4 +10,8 @@ API for score management:
 2. Add score
 3. Lower score
 
+Testing:
+1. Test for buzz state
+2. Possible implement mutual exclusion for positions array
+
 
