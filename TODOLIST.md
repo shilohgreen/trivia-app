@@ -14,4 +14,12 @@ Testing:
 1. Test for buzz state
 2. Possible implement mutual exclusion for positions array
 
+Backend API:
+1. Reset buzzer
+
+Next tasks:
+Finish control panel
+
+
+
 

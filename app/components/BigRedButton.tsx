@@ -12,9 +12,9 @@ export default function HomePage() {
   useEffect(() => {
     if (isPushed) {
       const intervalId = setInterval(() => {
-        console.log("Check if reset button is pushed");
+        console.log("Reset heartbeat");
       }, 1000);
-      
+
       return () => clearInterval(intervalId); // CLean up will only be needed if it enters the if block
     }
   }, [isPushed]);
