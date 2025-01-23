@@ -3,10 +3,11 @@ import { positions, scores } from "../shared";
 import { scoreRequestBody, TeamColours } from "../types";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
-  const body = await request.json();
+  const body: scoreRequestBody = await request.json();
   const { teamColour, isIncrease } = body;
 
-  if (!(TeamColours.includes(teamColour)) || typeof isIncrease !== "boolean") {
+  // Actually dont need this part, but it's here just in case
+  if (!TeamColours.includes(teamColour) || typeof isIncrease !== "boolean") {
     return NextResponse.json(
       { error: "Did not receive a valid team colour or boolean" },
       {
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   console.log(`Score updated for ${teamColour}: ${scores[teamColour]}`);
 
   return NextResponse.json(
-    { message: "Score updated successfully" },
+    { updatedScore: scores },
     {
       status: 200,
       headers: { "Content-Type": "application/json" },
