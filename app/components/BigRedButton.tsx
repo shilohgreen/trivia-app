@@ -44,7 +44,7 @@ export default function HomePage() {
     }
   };
 
-  const handleMouseDown = async (e: React.TouchEvent) => {
+  const handleMouseDown = async () => {
     // If its already pushed just dont do anything
     if (isPushed) {
       return;
@@ -58,7 +58,7 @@ export default function HomePage() {
       }
     } catch (err: unknown) {
       // If cant play audio, just dont do anything
-      console.log("Audio Playback failed");
+      console.log("Audio Playback failed:", err);
       return;
     }
 
@@ -80,7 +80,7 @@ export default function HomePage() {
       <div className="relative w-screen h-1/2">
         <div
           className="absolute w-2/3 h-1/3 top-20 left-12 bg-transparent z-10"
-          onTouchStart={(e: React.TouchEvent) => handleMouseDown(e)}
+          onTouchStart={() => handleMouseDown()}
         ></div>
         <Image src="/buttons/button-bottom.svg" alt="Bottom button" fill />
         <Image

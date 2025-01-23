@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { positions } from "../shared"; // Assuming setPositions is a function to update positions
 
 // Clear the positions array
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(): Promise<NextResponse> {
   // Cant reassign position as it binded as an import
   // Usually you can reassign let though
   // Side note: Scoping leaks downwards but not upwards

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { positions, scores } from "../shared";
+import { scores } from "../shared";
 import { scoreRequestBody, TeamColours } from "../types";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
