@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { positions } from "../shared";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
-  console.log("target url: ", Object.fromEntries(request.headers)["referer"]);
+  
 
   const teamColour = Object.fromEntries(request.headers)
     ["referer"].split("/")

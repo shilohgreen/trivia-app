@@ -3,6 +3,8 @@ import { positions } from "../shared";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   console.log("target url: ", Object.fromEntries(request.headers)["referer"]);
+
+  // Get the team colour from the url
   const teamColour = Object.fromEntries(request.headers)
     ["referer"].split("/")
     .pop();
@@ -17,8 +19,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     );
   }
 
+  console.log("positions: ", positions);
+
   // If not in array, then button has not been pushed
   if (!positions.includes(teamColour)) {
+    console.log("Button state: not pushed");
     return NextResponse.json(
       { message: false },
       {
@@ -27,6 +32,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       }
     );
   }
+
+  console.log("Button has been pushed");
 
   // If in array, then button has been pushed
   return NextResponse.json(

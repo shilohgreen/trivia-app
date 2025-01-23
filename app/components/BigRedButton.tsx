@@ -4,14 +4,13 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 export default function HomePage() {
-  console.log("HomePage");
-
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPushed, setIsPushed] = useState(false);
 
   useEffect(() => {
     if (isPushed) {
       const intervalId = setInterval(() => {
+        fetchIsPushed();
         console.log("Reset heartbeat");
       }, 1000);
 
@@ -34,12 +33,24 @@ export default function HomePage() {
       .catch((error) => console.error("Error:", error));
   }, []);
 
+  const fetchIsPushed = async () => {
+    try {
+      const response = await fetch("/api/ispushed");
+      const data = await response.json();
+      setIsPushed(data.message);
+      console.log("isPushed: ", data.message);
+    } catch (error) {
+      console.error("Error fetching isPushed:", error);
+    }
+  };
+
   const handleMouseDown = async (e: React.TouchEvent) => {
+    // If its already pushed just dont do anything
     if (isPushed) {
-      // If its already pushed just dont do anything
       return;
     }
 
+    // Play the audio
     try {
       if (audioRef.current) {
         await audioRef.current.play();

@@ -1,23 +1,30 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function ControlPanel() {
-  const [positions, setPositions] = React.useState([
-    "pink",
-    "green",
-    "purple",
-    "red",
-    "blue",
-  ]);
+  const [positions, setPositions] = useState<string[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const intervalId = setInterval(() => {
       fetchPositions();
     }, 500);
 
     return () => clearInterval(intervalId);
   }, []);
+
+  const resetButtons = async () => {
+    try {
+      const response = await fetch("/api/resetpositions");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      console.log("Reset response:", data.message);
+    } catch (error) {
+      console.error("Error resetting buttons:", error);
+    }
+  };
 
   const fetchPositions = async () => {
     try {
@@ -111,14 +118,31 @@ export default function ControlPanel() {
         >
           Decrease Red
         </button>
-        {positions.map((colour) => (
-          <div
-            key={`${colour}-decrease`}
-            className={`p-2 bg-${colour}-500 text-white rounded hover:bg-${colour}-600 transition`}
-          >
-            B {colour.charAt(0).toUpperCase() + colour.slice(1)}
-          </div>
-        ))}
+        <button
+          className="p-2 bg-red-700 text-white rounded hover:bg-red-800 transition"
+          onClick={async () => {
+            resetButtons()
+          }}
+        >
+          Reset Buttons
+        </button>
+        <button
+          className="p-2 bg-red-700 text-white rounded hover:bg-red-800 transition"
+          onClick={async () => {
+            fetchPositions()
+          }}
+        >
+          Fetch Positions
+        </button>
+        {positions.length > 0 &&
+          positions.map((colour) => (
+            <div
+              key={`${colour}-decrease`}
+              className={`p-2 bg-${colour}-500 text-white rounded hover:bg-${colour}-600 transition`}
+            >
+              B {colour.charAt(0).toUpperCase() + colour.slice(1)}
+            </div>
+          ))}
       </div>
     </div>
   );
