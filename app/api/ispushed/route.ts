@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { positions } from "../shared";
+import redis from "@/lib/redis";
+import { teamColours } from "../shared";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
-  console.log("target url: ", Object.fromEntries(request.headers)["referer"]);
+  const ITEM_SET_KEY = process.env.REDIS_SET_KEY || "button_press_set";
 
   // Get the team colour from the url
   const teamColour = Object.fromEntries(request.headers)
     ["referer"].split("/")
     .pop();
 
-  if (typeof teamColour !== "string") {
+  // IF NOT A VALID COLOUR, RETURN ERROR
+  if (typeof teamColour !== "string" || !teamColours.includes(teamColour)) {
     return NextResponse.json(
-      { error: "Did not receive a team colour" },
+      { error: "Did not receive a team valid colour" },
       {
         status: 400,
         headers: { "Content-Type": "application/json" },
@@ -19,10 +21,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     );
   }
 
-  console.log("positions: ", positions);
+  const exists = Boolean(await redis.sismember(ITEM_SET_KEY, teamColour));
 
   // If not in array, then button has not been pushed
-  if (!positions.includes(teamColour)) {
+  if (!exists) {
     console.log("Button state: not pushed");
     return NextResponse.json(
       { message: false },
@@ -32,8 +34,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       }
     );
   }
-
-  console.log("Button has been pushed");
 
   // If in array, then button has been pushed
   return NextResponse.json(

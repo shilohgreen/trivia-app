@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
-import { positions } from "../shared"; // Assuming setPositions is a function to update positions
+import redis from "@/lib/redis";
 
 // Clear the positions array
 
 export async function GET(): Promise<NextResponse> {
-  // Cant reassign position as it binded as an import
-  // Usually you can reassign let though
-  // Side note: Scoping leaks downwards but not upwards
-  positions.length = 0;
+
+  const QUEUE_KEY = process.env.REDIS_QUEUE_KEY || "button_press_queue";
+
+  // Retrieve and clear the button queue from Redis
+  await redis.del(QUEUE_KEY);
 
   return NextResponse.json(
     { message: "Positions cleared" },

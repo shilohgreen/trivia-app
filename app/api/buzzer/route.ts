@@ -3,7 +3,7 @@ import redis from "@/lib/redis";
 import { teamColours } from "../shared";
 
 const QUEUE_KEY = process.env.REDIS_QUEUE_KEY || "button_press_queue";
-const ITEM_SET_KEY = "button_press_set"; // Set to track unique items
+const ITEM_SET_KEY = process.env.REDIS_SET_KEY || "button_press_set"; 
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const teamColour = Object.fromEntries(request.headers)
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   });
 
   // Check if the item exists in the queue set
-  const exists = await redis.sismember(ITEM_SET_KEY, teamColour);
+  const exists = Boolean(await redis.sismember(ITEM_SET_KEY, teamColour));
 
   // IF ALREADY PUSHED, RETURN ERROR (TECHNICALLY SHOULD NOT HAPPEN BECAUSE BUTTON CAN ONLY BE PUSHED ONCE ON CLIENT)
   if (exists) {

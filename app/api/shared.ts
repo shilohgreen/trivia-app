@@ -1,4 +1,3 @@
-export const positions: string[] = [];
 export const scores: Record<string, number> = {
   red: 0,
   pink: 0,
