@@ -17,6 +17,8 @@ Testing:
 Backend API:
 1. Reset buzzer DONE
 
+Fix Race Condition
+
 23/1/2025 tasks:
 Finish control panel  functionality DONE
 

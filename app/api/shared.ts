@@ -6,3 +6,5 @@ export const scores: Record<string, number> = {
   green: 0,
   purple: 0
 };
+
+export const teamColours: string[] = ['red', 'pink', 'blue', 'green', 'purple'];
