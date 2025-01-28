@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to EC2 on master branch push
+    name: Deploy to EC2 on main branch push
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18.18.0" # Set the Node.js version
+          node-version: "18" # Updated to a more stable version
 
       - name: Install dependencies
         run: npm install # Install dependencies
@@ -35,7 +35,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
-          SOURCE: ".next/* package.json package-lock.json"  # Deploy `.next` and required files
+          SOURCE: "/*"  # Deploy `.next` and required files
           TARGET: ${{ secrets.TARGET_DIR }}
           EXCLUDE: "/node_modules/"
 
