@@ -48,6 +48,7 @@ jobs:
           script: |
             cd ${{ secrets.TARGET_DIR }}
             npm install --production
+            npm run build
             tmux kill-session -t trivia_session
             tmux new-session -d -s trivia_session
             tmux send-keys -t trivia_session 'npm run start' C-m
