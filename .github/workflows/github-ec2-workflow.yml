@@ -1,0 +1,49 @@
+name: Push-to-EC2
+
+# Trigger deployment only on push to main branch
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy to EC2 on master branch push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the files
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.17.0'  # Set the Node.js version
+
+      - name: Install dependencies
+        run: npm install  # Install dependencies
+
+      - name: Build the project
+        run: npm build  # Builds your project and outputs the files to the 'build' folder
+
+      - name: Deploy to EC2
+        uses: easingthemes/ssh-deploy@v3.0.1
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          SOURCE: "build/*"
+          TARGET: ${{ secrets.TARGET_DIR }}
+          EXCLUDE: "/node_modules/"
+
+      - name: Executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ${{ secrets.TARGET_DIR }}
+            npm install --production
+            tmux kill-session -t nextjs-app || true
+            tmux new-session -d -s nextjs-app "npm run start"
