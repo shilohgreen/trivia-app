@@ -35,7 +35,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
-          SOURCE: ".next/*"
+          SOURCE: ".next/* package.json package-lock.json"  # Deploy `.next` and required files
           TARGET: ${{ secrets.TARGET_DIR }}
           EXCLUDE: "/node_modules/"
 
@@ -47,6 +47,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ${{ secrets.TARGET_DIR }}
+            npm install --production
             tmux kill-session -t trivia_session
             tmux new-session -d -s trivia_session
             tmux send-keys -t trivia_session 'npm run start' C-m
