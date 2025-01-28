@@ -47,6 +47,5 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ${{ secrets.TARGET_DIR }}
-            npm install --production
             tmux kill-session -t nextjs-app || true
             tmux new-session -d -s nextjs-app "npm run start"
