@@ -21,6 +21,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     );
   }
 
+  const teamColoursSet = await redis.smembers(ITEM_SET_KEY);
+  console.log("Current team colours in set:", teamColoursSet);
+
   const exists = Boolean(await redis.sismember(ITEM_SET_KEY, teamColour));
 
   // If not in array, then button has not been pushed

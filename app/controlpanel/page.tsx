@@ -33,9 +33,15 @@ export default function ControlPanel() {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      console.log("Fetched positions:", data.positions);
-      setPositions(data.positions);
-      return data.positions;
+      // original positions var is an array of strings, each string is a JSON object (stringified)
+      // parse each string into JSON and extract the color
+      console.log("data.positions", data.positions);
+      const positions: string[] = data.positions.map(
+        (pos: string) => JSON.parse(pos).teamColour 
+      );
+      console.log("Fetched positions:", positions);
+      setPositions(positions);
+      return positions;
     } catch (error) {
       console.error("Error fetching positions:", error);
     }
@@ -121,7 +127,7 @@ export default function ControlPanel() {
         <button
           className="p-2 bg-red-700 text-white rounded hover:bg-red-800 transition"
           onClick={async () => {
-            resetButtons()
+            resetButtons();
           }}
         >
           Reset Buttons
@@ -129,7 +135,7 @@ export default function ControlPanel() {
         <button
           className="p-2 bg-red-700 text-white rounded hover:bg-red-800 transition"
           onClick={async () => {
-            fetchPositions()
+            fetchPositions();
           }}
         >
           Fetch Positions
@@ -140,7 +146,7 @@ export default function ControlPanel() {
               key={`${colour}-decrease`}
               className={`p-2 bg-${colour}-500 text-white rounded hover:bg-${colour}-600 transition`}
             >
-              B {colour.charAt(0).toUpperCase() + colour.slice(1)}
+              {colour}
             </div>
           ))}
       </div>
