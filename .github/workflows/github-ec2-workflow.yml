@@ -32,7 +32,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
-          SOURCE: "build/*"
+          SOURCE: ".next/*"
           TARGET: ${{ secrets.TARGET_DIR }}
           EXCLUDE: "/node_modules/"
 
