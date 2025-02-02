@@ -47,7 +47,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ${{ secrets.TARGET_DIR }}
-            npm install --production
+            npm install
             npm run build
             tmux kill-session -t trivia_session
             tmux new-session -d -s trivia_session
