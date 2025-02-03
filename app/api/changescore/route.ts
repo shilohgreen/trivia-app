@@ -25,10 +25,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   console.log(`Score updated for ${teamColour}: ${scores[teamColour]}`);
 
   return NextResponse.json(
-    { updatedScore: scores },
+    { updatedScores: scores },
     {
       status: 200,
       headers: { "Content-Type": "application/json" },
     }
   );
+}
+
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  return NextResponse.json({ updatedScores: scores }, { status: 200 });
 }

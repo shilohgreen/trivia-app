@@ -4,12 +4,19 @@ import React, { useEffect, useState } from "react";
 
 export default function ControlPanel() {
   const [positions, setPositions] = useState<string[]>([]);
+  const [points, setPoints] = useState<Record<string, number | undefined>>({
+    blue: undefined,
+    green: undefined,
+    pink: undefined,
+    purple: undefined,
+    red: undefined,
+  });
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       fetchPositions();
     }, 500);
-
+    fetchScores();
     return () => clearInterval(intervalId);
   }, []);
 
@@ -35,15 +42,26 @@ export default function ControlPanel() {
       const data = await response.json();
       // original positions var is an array of strings, each string is a JSON object (stringified)
       // parse each string into JSON and extract the color
-      console.log("data.positions", data.positions);
+      // console.log("data.positions", data.positions);
       const positions: string[] = data.positions.map(
-        (pos: string) => JSON.parse(pos).teamColour 
+        (pos: string) => JSON.parse(pos).teamColour
       );
-      console.log("Fetched positions:", positions);
+      // console.log("Fetched positions:", positions);
       setPositions(positions);
       return positions;
     } catch (error) {
       console.error("Error fetching positions:", error);
+    }
+  };
+
+  const fetchScores = async () => {
+    try {
+      const response = await fetch("/api/changescore");
+      const data = await response.json();
+      console.log(data)
+      setPoints(data.updatedScores);
+    } catch (error) {
+      console.error("Error fetching changescore:", error);
     }
   };
 
@@ -57,7 +75,9 @@ export default function ControlPanel() {
     });
 
     const data = await response.json();
-    console.log(data);
+    if (data) {
+      setPoints(data.updatedScores);
+    }
   };
 
   return (
@@ -70,6 +90,7 @@ export default function ControlPanel() {
         >
           Increase Pink
         </button>
+        <div>{points.pink ?? points.pink}</div>
         <button
           className="p-2 bg-pink-500 text-white rounded hover:bg-pink-600 transition"
           onClick={() => handleButtonClick("pink", false)}
@@ -82,6 +103,7 @@ export default function ControlPanel() {
         >
           Increase Blue
         </button>
+        <div>{points.blue}</div>
         <button
           className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
           onClick={() => handleButtonClick("blue", false)}
@@ -94,6 +116,7 @@ export default function ControlPanel() {
         >
           Increase Green
         </button>
+        <div>{points.green}</div>
         <button
           className="p-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
           onClick={() => handleButtonClick("green", false)}
@@ -106,6 +129,7 @@ export default function ControlPanel() {
         >
           Increase Purple
         </button>
+        <div>{points.purple}</div>
         <button
           className="p-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition"
           onClick={() => handleButtonClick("purple", false)}
@@ -118,6 +142,7 @@ export default function ControlPanel() {
         >
           Increase Red
         </button>
+        <div>{points.red}</div>
         <button
           className="p-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
           onClick={() => handleButtonClick("red", false)}
