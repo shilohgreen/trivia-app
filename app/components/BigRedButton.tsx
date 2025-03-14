@@ -20,7 +20,7 @@ export default function HomePage() {
 
   useEffect(() => {
     // Initialize the audio instance once on component mount
-    audioRef.current = new Audio("/sounds/button-push.mp3");
+    audioRef.current = new Audio("/sounds/buzzer.mp3");
 
     // Set button state based on backend state
     fetch("/api/ispushed")
