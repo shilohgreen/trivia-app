@@ -2,15 +2,15 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import useSocket from "../../hooks/useSocket";
+// import useSocket from "../../hooks/useSocket";
 
 export default function HomePage() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPushed, setIsPushed] = useState(false);
-  const { sendMessage, sendColorData } = useSocket({
-    roomId: "button-room", // You can customize this room ID
-    playerId: "button-" + Math.random().toString(36).substring(2, 9), // Generate a unique ID
-  });
+  // const { sendMessage, sendColorData } = useSocket({
+  //   roomId: "button-room", // You can customize this room ID
+  //   playerId: "button-" + Math.random().toString(36).substring(2, 9), // Generate a unique ID
+  // });
 
   useEffect(() => {
     if (isPushed) {
@@ -80,20 +80,20 @@ export default function HomePage() {
     setIsPushed(true);
   };
 
-  // Function to send data to PartyKit socket
-  const sendToPartyKit = () => {
-    sendColorData({
-      type: "buttonpress",
-      color: "blue",
-    });
-  };
+  // // Function to send data to PartyKit socket
+  // const sendToPartyKit = () => {
+  //   sendColorData({
+  //     type: "buttonpress",
+  //     color: "blue",
+  //   });
+  // };
 
   return (
     <div className="w-screen h-screen flex justify-center items-end">
       <div className="relative w-screen h-1/2">
         <div
           className="absolute w-2/3 h-1/3 top-20 left-12 bg-transparent z-10"
-          onTouchStart={() => sendToPartyKit()}
+          onTouchStart={() => handleMouseDown()}
         ></div>
         <Image src="/buttons/button-bottom.svg" alt="Bottom button" fill />
         <Image
